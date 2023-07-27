@@ -19,7 +19,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	// Following dependencies added for this example
 	implementation("org.springframework.boot:spring-boot-starter-actuator") // Spring Cloud Bus runs on top of Actuator
-	implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp:2.2.2.RELEASE") // Spring Cloud Bus with AMQP
+	implementation("org.springframework.cloud:spring-cloud-starter-bus-kafka:2.2.2.RELEASE") // Spring Cloud Bus with Kafka
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin") // Jackson is used for Event Serialization to JSON
 	// End of new dependencies
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

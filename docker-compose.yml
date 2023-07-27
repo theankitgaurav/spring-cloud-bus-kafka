@@ -10,26 +10,47 @@ services:
       - service1
       - service2
       - service3
-  rabbit:
-    image:  rabbitmq:3-management
+  kafka:
+    container_name: kafka
+    image: 'bitnami/kafka:latest'
     ports:
-    - 5672:5672
-    - 15672:15672
+      - '9093:9093'
+      - '9092:9092'
+    expose:
+      - "9092"
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CREATE_TOPICS=someBus:1:1
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_ADVERTISED_LISTENERS=OUTSIDE://localhost:9093,PLAINTEXT://kafka:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_LISTENERS=OUTSIDE://0.0.0.0:9093,PLAINTEXT://0.0.0.0:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,OUTSIDE:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
   service1:
+    container_name: service1
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - rabbit
+      - kafka
+    environment:
+      - KAFKA_URL=http://kafka:9092
   service2:
+    container_name: service2
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - rabbit
+      - kafka
+    environment:
+      - KAFKA_URL=http://kafka:9092
   service3:
+    container_name: service3
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - rabbit
+      - kafka
+    environment:
+      - KAFKA_URL=http://kafka:9092

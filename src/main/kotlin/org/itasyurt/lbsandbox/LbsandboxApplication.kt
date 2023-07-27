@@ -39,11 +39,13 @@ class DummyController {
 
     @RequestMapping("", method = [RequestMethod.GET])
     fun getResult(): Int {
+        println("State is: ${state.data}")
         return state.data
     }
 
     @RequestMapping("", method = [RequestMethod.PUT])
     fun updateData(@RequestParam newData: Int) {
+        println("Received request with data : $newData")
         val id = busProperties.id
         val event = UpdateDataEvent(this, id, newData)
         applicationContext.publishEvent(event)
